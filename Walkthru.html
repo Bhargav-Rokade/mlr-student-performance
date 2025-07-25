@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple Linear Regression: Student Performance Analysis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0 20px;
+      background-color: #f8f8f8;
+      color: #222;
+    }
+    h1, h2, h3 {
+      color: #1a237e;
+    }
+    pre {
+      background-color: #e8eaf6;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    img {
+      max-width: 100%;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Multiple Linear Regression Walkthrough</h1>
+  <p>This walkthrough explores how multiple linear regression (MLR) is used to model and predict student performance based on various academic and lifestyle factors.</p>
+
+  <div class="section">
+    <h2>📥 Data Import & Description</h2>
+    <pre><code>import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+dataset = pd.read_csv('Student_Performance.csv')</code></pre>
+    <p>We work with a dataset of 10,000 students, containing:</p>
+    <ul>
+      <li><b>4 continuous variables</b></li>
+      <li><b>1 binary categorical variable</b> (Extracurricular Activities)</li>
+      <li><b>1 target variable</b> (Performance Index)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🔍 Exploratory Data Analysis (EDA)</h2>
+    <p>We start by analyzing data types, distribution, and visualizing feature relationships with the target variable.</p>
+
+    <h3>Distributions</h3>
+    <img src="images/feature_distribution.png" alt="Feature Distributions">
+
+    <h3>Scatter Plots vs Target</h3>
+    <img src="images/scatterplots.png" alt="Scatter plots vs Performance Index">
+
+    <h3>Correlation Heatmap</h3>
+    <img src="images/heatmap.png" alt="Correlation Heatmap">
+
+    <p><b>Insights:</b></p>
+    <ul>
+      <li><b>Previous Scores</b> have a very strong positive correlation (0.92) with Performance Index.</li>
+      <li><b>Hours Studied</b> has a moderate positive correlation (0.37).</li>
+      <li>No multicollinearity issues among features.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🧹 Data Preprocessing</h2>
+    <p><b>Binary Encoding</b> for <code>Extracurricular Activities</code>:</p>
+    <pre><code>dataset['Extracurricular Activities'] = dataset['Extracurricular Activities'].map({'Yes': 1, 'No': 0})</code></pre>
+
+    <p><b>Standardization</b> for continuous variables:</p>
+    <pre><code>from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+cols = ['Hours Studied', 'Previous Scores', 'Sleep Hours', 'Sample Question Papers Practiced']
+dataset[cols] = scaler.fit_transform(dataset[cols])</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>✂️ Train-Test Split</h2>
+    <pre><code>from sklearn.model_selection import train_test_split
+
+X = dataset.drop("Performance Index", axis=1)
+y = dataset["Performance Index"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=13)</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🧠 Model Fitting</h2>
+    <pre><code>from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+model.fit(X_train, y_train)</code></pre>
+
+    <h3>Model Coefficients</h3>
+    <pre><code>print(pd.Series(model.coef_, index=X.columns))</code></pre>
+    <p>Equation of the fitted model:</p>
+    <pre><code>Y = β₀ + β₁·X₁ + β₂·X₂ + β₃·X₃ + β₄·X₄ + β₅·X₅</code></pre>
+    <ul>
+      <li>X₁ = Hours Studied</li>
+      <li>X₂ = Previous Scores</li>
+      <li>X₃ = Extracurricular Activities</li>
+      <li>X₄ = Sleep Hours</li>
+      <li>X₅ = Sample Question Papers Practiced</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>📊 Model Evaluation</h2>
+    <pre><code>from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)</code></pre>
+    <p><b>Results:</b></p>
+    <ul>
+      <li>MAE: 1.622</li>
+      <li>MSE: 4.144</li>
+      <li>RMSE: 2.036</li>
+      <li>R² Score: 0.989</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>📈 Residual Analysis</h2>
+    <img src="images/residuals_vs_pred.png" alt="Residuals vs Predicted">
+    <p>Residuals are evenly spread around 0 ; no pattern detected. Indicates assumptions of linearity and homoscedasticity hold.</p>
+
+    <img src="images/residual_dist.png" alt="Residual Distribution">
+    <p>Residuals appear normally distributed ; supports the assumption of normality.</p>
+  </div>
+
+  <footer>
+    <p>Simple MLR Student Performance Predictor | Built with ❤️ using Python and GitHub Pages | Bhargav Rokade </p>
+  </footer>
+</body>
+</html>
