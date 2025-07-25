@@ -1,5 +1,3 @@
-# mlr-student-performance
-
 # Multiple Linear Regression: A Complete Walkthrough Project 🚀
 
 This project presents a step-by-step walkthrough of building a **Multiple Linear Regression (MLR)** model using Python. Designed as a clean and readable web portfolio, this project is ideal for students and data science beginners.
