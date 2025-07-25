@@ -5,7 +5,7 @@
 This project presents a step-by-step walkthrough of building a **Multiple Linear Regression (MLR)** model using Python. Designed as a clean and readable web portfolio, this project is ideal for students and data science beginners.
 
   
-📁 Dataset used: [Simulated student performance data (10,000 samples, 6 features)  ](https://www.kaggle.com/datasets/nikhil7280/student-performance-multiple-linear-regression/code)
+📁 Dataset used: https://www.kaggle.com/datasets/nikhil7280/student-performance-multiple-linear-regression/data
 🧠 Goal: Predict the **Performance Index** variable
 
 ---
